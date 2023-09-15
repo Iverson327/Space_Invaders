@@ -22,7 +22,7 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject {
 
     private final double width = 25;
     private final double height = 30;
-    private final Image image;
+    private Image image;
     private double speedh = 0.2;
     private double speedv = 0.015;
     private boolean left = true;
@@ -131,5 +131,10 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject {
     // @Override
     public boolean isDelete(){
         return this.isDelete;
+    }
+
+    @Override
+    public void setImageToNull(){
+        this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, true, true);;
     }
 }

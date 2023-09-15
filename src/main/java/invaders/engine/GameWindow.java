@@ -60,8 +60,7 @@ public class GameWindow {
             for (EntityView view : entityViews) {
                 if (view.matchesEntity(entity)) {
                     if(entity.isDelete()){
-                        pane.getChildren().remove(view.getNode());
-                        entityViews.remove(view);
+                        view.markForDelete();
                     }else{
                         notFound = false;
                         view.update(xViewportOffset, yViewportOffset);

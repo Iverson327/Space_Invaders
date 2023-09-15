@@ -32,8 +32,11 @@ public class GameEngine {
 	private List<Enemy> enemies;
 	private List<Bunker> bunkers;
 	private List<Bullet> bullets;
+	private List<Bullet> playerBullets;
 	private List<Renderable> renderables;
 	private Player player;
+
+	private PlayerBullet playerBullet;
 
 	private boolean left;
 	private boolean right;
@@ -44,6 +47,7 @@ public class GameEngine {
 		enemies = new ArrayList<Enemy>();
 		bunkers = new ArrayList<Bunker>();
 		bullets = new ArrayList<Bullet>();
+		playerBullets = new ArrayList<Bullet>();
 		renderables = new ArrayList<Renderable>();
 
 		// read the config here
@@ -124,27 +128,43 @@ public class GameEngine {
 		for(Bullet bl: bullets){
 			bl.update();
 		}
-		
-		
-		for(int i = 0; i < bunkers.size(); i++){
-			if(bunkers.get(i).isDelete()){
-				renderables.remove(bunkers.get(i));
-				bunkers.remove(bunkers.get(i));
-			}
-		}
 
-		for(int i = 0; i < enemies.size(); i++){
-			if(enemies.get(i).isDelete()){
-				renderables.remove(enemies.get(i));
-				enemies.remove(enemies.get(i));
-			}
+		for(Bullet bl: playerBullets){
+			bl.update();
 		}
 		
-		for(int i = 0; i < bullets.size(); i++){
-			if(bullets.get(i).isDelete()){
-				renderables.remove(bullets.get(i));
-				bullets.remove(bullets.get(i));
+		try{
+			for(int i = 0; i < bunkers.size(); i++){
+				if(bunkers.get(i).isDelete()){
+					renderables.remove(bunkers.get(i));
+					bunkers.remove(bunkers.get(i));
+					bunkers.get(i).setImageToNull();
+				}
 			}
+
+			for(int i = 0; i < enemies.size(); i++){
+				if(enemies.get(i).isDelete()){
+					renderables.remove(enemies.get(i));
+					enemies.remove(enemies.get(i));
+					enemies.get(i).setImageToNull();
+				}
+			}
+			
+			for(int i = 0; i < bullets.size(); i++){
+				if(bullets.get(i).isDelete()){
+					renderables.remove(bullets.get(i));
+					bullets.remove(bullets.get(i));
+				}
+			}
+
+			for(int i = 0; i < playerBullets.size(); i++){
+				if(playerBullets.get(i).isDelete()){
+					renderables.remove(playerBullets.get(i));
+					playerBullets.remove(playerBullets.get(i));
+				}
+			}
+		}catch(java.lang.IndexOutOfBoundsException e){
+			
 		}
 		
 
@@ -192,10 +212,11 @@ public class GameEngine {
 	}
 
 	public boolean shootPressed(){
-		player.shoot();
-		PlayerBullet bullet = new PlayerBullet(new Vector2D(player.getPosition().getX(), player.getPosition().getY()));
-		bullets.add(bullet);
-		renderables.add(bullet);
+		if(!playerBullets.contains(playerBullet)){
+			playerBullet = player.shoot();
+			playerBullets.add(playerBullet);
+			renderables.add(playerBullet);
+		}
 		return true;
 	}
 

@@ -7,13 +7,14 @@ import invaders.rendering.Animator;
 import invaders.rendering.Renderable;
 import invaders.entities.EntityView;
 import invaders.entities.Bullet;
+import invaders.physics.Collider;
 import invaders.GameObject;
 
 import javafx.scene.image.Image;
 
 import java.io.File;
 
-public interface EnemyBullet extends Bullet, Moveable, Damagable, Renderable, GameObject {
+public interface EnemyBullet extends Bullet {
     public boolean isDelete();
     public void takeDamage(double amount);
     public double getHealth();

@@ -21,11 +21,11 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject {
     private final double width;
     private final double height;
 
-    private final Image image;
+    private  Image image;
     private final Image greenImage;
     private final Image yellowImage;
     private final Image redImage;
-    private boolean isDelete = true;
+    private boolean isDelete = false;
 
     public Bunker(Vector2D position, double width, double height){
         this.greenImage =  new Image(new File("src/main/resources/green_bunker.png").toURI().toString(), width, height, true, true);
@@ -100,8 +100,13 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject {
     @Override
     public void update(){}
 
-    // @Override
+    @Override
     public boolean isDelete(){
         return this.isDelete;
+    }
+
+    @Override
+    public void setImageToNull(){
+        this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, true, true);;
     }
 }

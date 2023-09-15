@@ -53,4 +53,7 @@ public class SpaceBackground implements Renderable {
 	public boolean isDelete(){
 		return false;
 	}
+
+	@Override
+	public void setImageToNull(){}
 }

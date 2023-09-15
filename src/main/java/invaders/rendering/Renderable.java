@@ -19,6 +19,8 @@ public interface Renderable {
 
     public boolean isDelete();
 
+    public void setImageToNull();
+
     public Vector2D getPosition();
 
     public Renderable.Layer getLayer();

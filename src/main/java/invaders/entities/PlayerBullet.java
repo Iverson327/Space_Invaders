@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class PlayerBullet implements Bullet, Moveable, Damagable, Renderable, GameObject {
+public class PlayerBullet implements Bullet{
 
     private final Vector2D position;
     private final Animator anim = null;
@@ -90,18 +90,23 @@ public class PlayerBullet implements Bullet, Moveable, Damagable, Renderable, Ga
     public void speedUp(){}
 
     @Override
-    public void start(){}
+    public void start(){
+        this.isDelete = false;
+    }
 
     @Override
     public void update(){
         up();
-        if(this.position.getY() <= 0){
+        if(this.position.getY() <= 0 - this.height){
             this.isDelete = true;
         }
     }
 
-    // @Override
+    @Override
     public boolean isDelete(){
         return this.isDelete;
     }
+
+    @Override
+    public void setImageToNull(){}
 }
