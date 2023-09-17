@@ -1,4 +1,4 @@
-package invaders.entities;
+package invaders.entities.projectiles;
 
 import invaders.logic.Damagable;
 import invaders.physics.Moveable;
@@ -20,19 +20,23 @@ public class PlayerBullet implements Bullet{
 
     private final double width = 15;
     private final double height = 20;
-    private final Image image;
-    private double speedv = 1;
+    private Image image;
+    private double speedv = 1.5;
     private boolean isDelete = false;
 
 
     public PlayerBullet(Vector2D position){
-        this.image = new Image(new File("src/main/resources/fastBullet.png").toURI().toString(), width, height, true, true);
+        this.image = new Image(new File("src/main/resources/slowBullet.png").toURI().toString(), width, height, true, true);
         this.position = position;
     }
 
     @Override
     public void takeDamage(double amount) {
         this.health -= amount;
+        if(this.health <= 0){
+            this.isDelete = true;
+            this.setImageToNull();
+        }
     }
 
     @Override
@@ -92,6 +96,7 @@ public class PlayerBullet implements Bullet{
     @Override
     public void start(){
         this.isDelete = false;
+        this.image = new Image(new File("src/main/resources/slowBullet.png").toURI().toString(), width, height, true, true);
     }
 
     @Override
@@ -108,5 +113,7 @@ public class PlayerBullet implements Bullet{
     }
 
     @Override
-    public void setImageToNull(){}
+    public void setImageToNull(){
+        this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, true, true);
+    }
 }

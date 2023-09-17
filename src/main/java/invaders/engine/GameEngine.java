@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import invaders.GameObject;
+import invaders.builders.EnemyBuilder;
 import invaders.entities.Player;
 import invaders.entities.Enemy;
-import invaders.entities.Bullet;
-import invaders.entities.PlayerBullet;
-import invaders.entities.EnemyBullet;
+import invaders.entities.projectiles.Bullet;
+import invaders.entities.projectiles.PlayerBullet;
+import invaders.entities.projectiles.EnemyBullet;
 import invaders.entities.Bunker;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
+
+import invaders.builders.BuildObject;
+import invaders.builders.BunkerBuilder;
+import invaders.builders.EnemyBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,6 +27,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.util.Random;
 
 /**
  * This class manages the main loop and logic of the game
@@ -36,10 +43,14 @@ public class GameEngine {
 	private List<Renderable> renderables;
 	private Player player;
 
-	private PlayerBullet playerBullet;
+	private boolean end = false;
+
+	private Bullet playerBullet;
 
 	private boolean left;
 	private boolean right;
+
+	private Random random = new Random();
 
 	public GameEngine(String config){
 
@@ -71,16 +82,17 @@ public class GameEngine {
 
 				String projectileStrategy = (String) jsonEnemy.get("projectile");
 
-				Enemy enemy = new Enemy(new Vector2D(enemyX, enemyY));
+				EnemyBuilder embuilder = new EnemyBuilder();
+				embuilder.buildHealth();
+				embuilder.buildImage();
+				embuilder.buildPosition(new Vector2D(enemyX, enemyY));
+				embuilder.buildType(projectileStrategy);
+				Enemy enemy = embuilder.getObject();
 				renderables.add(enemy);
 				// gameobjects.add(enemy);
 				enemies.add(enemy);
-
-				
-
-				// TODO: delete me, this is just a demonstration:
-				// System.out.println("Enemey x: " + positionX + ", projectile: " + projectileStrategy);
 			}
+
 			JSONArray jsonBunkers = (JSONArray) jsonObject.get("Bunkers");
 			for (Object obj : jsonBunkers) {
 				JSONObject jsonBunker = (JSONObject) obj;
@@ -92,7 +104,13 @@ public class GameEngine {
 				long bunkerW = (long) ((JSONObject) jsonBunker.get("size")).get("x");
 				long bunkerH = (long) ((JSONObject) jsonBunker.get("size")).get("y");
 
-				Bunker bunker = new Bunker(new Vector2D(bunkerX, bunkerY), bunkerW, bunkerH);
+				BunkerBuilder bkBuilder = new BunkerBuilder();
+				bkBuilder.buildHealth();
+				bkBuilder.buildPosition(new Vector2D(bunkerX, bunkerY));
+				bkBuilder.buildWidth(bunkerW);
+				bkBuilder.buildHeight(bunkerH);
+				Bunker bunker = bkBuilder.getObject();
+				// Bunker bunker = new Bunker(new Vector2D(bunkerX, bunkerY), bunkerW, bunkerH);
 				renderables.add(bunker);
 				// gameobjects.add(bunker);
 				bunkers.add(bunker);
@@ -117,57 +135,98 @@ public class GameEngine {
 	 * Updates the game/simulation
 	 */
 	public void update(){
+		if(end){
+			return;
+		}
 		movePlayer();
 		for(Enemy em: enemies){
 			em.update();
+			if(this.bullets.size() < 3){
+				if(random.nextInt(600) == 1){
+					Bullet bullet = em.shoot();
+					bullets.add(bullet);
+					renderables.add(bullet);
+				}
+			}
 		}
 		for(Bunker bk: bunkers){
 			bk.update();
 		}
 
-		for(Bullet bl: bullets){
-			bl.update();
+		for(Bullet bullet: bullets){
+			bullet.update();
 		}
 
-		for(Bullet bl: playerBullets){
-			bl.update();
+		for(Bullet bullet: playerBullets){
+			bullet.update();
+			for(Enemy em: enemies){
+				if(bullet.isColliding(em)){
+					// System.out.print("collide\n");
+					em.takeDamage(1);
+					bullet.takeDamage(1);
+					for(Enemy enemy: enemies){
+						enemy.speedUp();
+					}
+					break;
+				}
+			}
+			for(Bullet emBullet: bullets){
+				if(bullet.isColliding(emBullet)){
+					emBullet.takeDamage(1);
+					bullet.takeDamage(1);
+					break;
+				}
+			}
+		}
+
+		for(Enemy em: enemies){
+			for(Bunker bk: bunkers){
+				if(em.isColliding(bk)){
+					// System.out.print("collide\n");
+					bk.takeDamage(1000);
+					break;
+				}
+			}
+			if(em.isColliding(player)){
+				this.end = true;
+				break;
+			}
+			if(em.getPosition().getY() >= 399-em.getHeight()){
+				this.end = true;
+				break;
+			}
+		}
+
+		for(Bullet bullet: bullets){
+			for(Bunker bk: bunkers){
+				if(bullet.isColliding(bk)){
+					// System.out.print("collide\n");
+					bk.takeDamage(1);
+					bullet.takeDamage(1);
+					break;
+				}
+			}
+			if(bullet.isColliding(player)){
+				player.takeDamage(1);
+				bullet.takeDamage(1);
+				if(player.getHealth() <= 0){
+					this.end = true;
+					break;
+				}
+				break;
+			}
 		}
 		
-		try{
-			for(int i = 0; i < bunkers.size(); i++){
-				if(bunkers.get(i).isDelete()){
-					renderables.remove(bunkers.get(i));
-					bunkers.remove(bunkers.get(i));
-					bunkers.get(i).setImageToNull();
-				}
-			}
+		bunkers.removeIf(Bunker::isDelete);
+		enemies.removeIf(Enemy::isDelete);
+		bullets.removeIf(Bullet::isDelete);
+		playerBullets.removeIf(Bullet::isDelete);
+		// renderables.removeIf(Renderable::isDelete);
 
-			for(int i = 0; i < enemies.size(); i++){
-				if(enemies.get(i).isDelete()){
-					renderables.remove(enemies.get(i));
-					enemies.remove(enemies.get(i));
-					enemies.get(i).setImageToNull();
-				}
-			}
-			
-			for(int i = 0; i < bullets.size(); i++){
-				if(bullets.get(i).isDelete()){
-					renderables.remove(bullets.get(i));
-					bullets.remove(bullets.get(i));
-				}
-			}
-
-			for(int i = 0; i < playerBullets.size(); i++){
-				if(playerBullets.get(i).isDelete()){
-					renderables.remove(playerBullets.get(i));
-					playerBullets.remove(playerBullets.get(i));
-				}
-			}
-		}catch(java.lang.IndexOutOfBoundsException e){
-			
+		if(enemies.size() == 0){
+			this.end = true;
 		}
 		
-
 		// ensure that renderable foreground objects don't go off-screen
 		for(Renderable ro: renderables){
 			if(!ro.getLayer().equals(Renderable.Layer.FOREGROUND)){
@@ -194,7 +253,6 @@ public class GameEngine {
 	public List<Renderable> getRenderables(){
 		return renderables;
 	}
-
 
 	public void leftReleased() {
 		this.left = false;

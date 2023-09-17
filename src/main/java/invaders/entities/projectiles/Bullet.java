@@ -1,4 +1,4 @@
-package invaders.entities;
+package invaders.entities.projectiles;
 
 import invaders.logic.Damagable;
 import invaders.physics.Moveable;

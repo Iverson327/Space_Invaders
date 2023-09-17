@@ -7,8 +7,9 @@ import invaders.physics.Vector2D;
 import invaders.physics.Collider;
 import invaders.rendering.Animator;
 import invaders.rendering.Renderable;
-
-import invaders.entities.PlayerBullet;
+import invaders.entities.projectiles.BulletFactory;
+import invaders.entities.projectiles.PlayerBullet;
+import invaders.entities.projectiles.Bullet;
 
 import javafx.scene.image.Image;
 
@@ -24,12 +25,12 @@ public class Player implements Moveable, Damagable, Renderable, Collider, Shoota
     private final double height = 30;
     private final Image image;
 
-    private PlayerBullet bullet;
+    private Bullet bullet;
 
     public Player(Vector2D position){
         this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), width, height, true, true);
         this.position = position;
-        this.bullet = new PlayerBullet(new Vector2D(this.getPosition().getX(), this.getPosition().getY()));
+        this.bullet = BulletFactory.makeBullet("Player", new Vector2D(this.getPosition().getX(), this.getPosition().getY()));
     }
 
     @Override
@@ -71,7 +72,7 @@ public class Player implements Moveable, Damagable, Renderable, Collider, Shoota
     public void speedUp(){}
 
     @Override
-    public PlayerBullet shoot(){
+    public Bullet shoot(){
         // todo
         this.bullet.getPosition().setX(this.getPosition().getX());
         this.bullet.getPosition().setY(this.getPosition().getY());

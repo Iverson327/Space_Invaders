@@ -61,11 +61,10 @@ public class GameWindow {
                 if (view.matchesEntity(entity)) {
                     if(entity.isDelete()){
                         view.markForDelete();
-                    }else{
-                        notFound = false;
-                        view.update(xViewportOffset, yViewportOffset);
-                        break;
                     }
+                    notFound = false;
+                    view.update(xViewportOffset, yViewportOffset);
+                    break;
                 }
             }
             if (notFound) {

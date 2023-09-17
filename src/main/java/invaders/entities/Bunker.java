@@ -7,39 +7,40 @@ import invaders.rendering.Animator;
 import invaders.rendering.Renderable;
 import invaders.entities.EntityView;
 import invaders.GameObject;
-
+import invaders.builders.BuildObject;
 import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class Bunker implements Moveable, Damagable, Renderable, GameObject {
+public class Bunker implements Moveable, Damagable, Renderable, GameObject, BuildObject {
 
-    private final Vector2D position;
+    private Vector2D position;
     private final Animator anim = null;
-    private double health = 100;
+    private double health;
 
-    private final double width;
-    private final double height;
+    private double width;
+    private double height;
 
-    private  Image image;
+    private Image image;
     private final Image greenImage;
     private final Image yellowImage;
     private final Image redImage;
     private boolean isDelete = false;
 
-    public Bunker(Vector2D position, double width, double height){
+    public Bunker(){
         this.greenImage =  new Image(new File("src/main/resources/green_bunker.png").toURI().toString(), width, height, true, true);
         this.yellowImage = new Image(new File("src/main/resources/yellow_bunker.png").toURI().toString(), width, height, true, true);
         this.redImage = new Image(new File("src/main/resources/red_bunker.png").toURI().toString(), width, height, true, true);
         this.image = this.greenImage;
-        this.position = position;
-        this.width = width;
-        this.height = height;
     }
 
     @Override
     public void takeDamage(double amount) {
         this.health -= amount;
+        if(this.health <= 0){
+            this.setImageToNull();
+            this.isDelete = true;
+        }
     }
 
     @Override
@@ -108,5 +109,29 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject {
     @Override
     public void setImageToNull(){
         this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, true, true);;
+    }
+
+    public void setWidth(double width){
+        this.width = width;
+    }
+
+    public void setHeight(double height){
+        this.height = height;
+    }
+
+    @Override
+    public void setPosition(Vector2D position){
+        this.position = position;
+    }
+
+
+    @Override
+    public void setHealth(double health){
+        this.health = health;
+    }
+
+    @Override
+    public void setImage(Image image){
+        this.image = image;
     }
 }

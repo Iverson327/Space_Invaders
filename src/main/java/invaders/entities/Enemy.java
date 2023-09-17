@@ -1,24 +1,29 @@
 package invaders.entities;
 
 import invaders.logic.Damagable;
+import invaders.logic.Shootable;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Animator;
 import invaders.rendering.Renderable;
 import invaders.entities.EntityView;
 import invaders.GameObject;
+import invaders.builders.BuildObject;
+import invaders.entities.projectiles.BulletFactory;
+import invaders.entities.projectiles.EnemyBullet;
+import invaders.entities.projectiles.Bullet;
 
 import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class Enemy implements Moveable, Damagable, Renderable, GameObject {
+public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shootable, BuildObject {
 
-    private final Vector2D position;
+    private Vector2D position;
     private final Animator anim = null;
     private double health = 1;
-    private final double initX;
-    private final double initY;
+    private double initX;
+    private double initY;
 
     private final double width = 25;
     private final double height = 30;
@@ -30,16 +35,15 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject {
 
     private boolean isDelete = false;
 
-    public Enemy(Vector2D position){
-        this.image = new Image(new File("src/main/resources/enemy.png").toURI().toString(), width, height, true, true);
-        this.position = position;
-        this.initX = position.getX();
-        this.initY = position.getY();
-    }
+    private Bullet bullet;
 
     @Override
     public void takeDamage(double amount) {
         this.health -= amount;
+        if(this.health <= 0){
+            this.isDelete = true;
+            this.setImageToNull();
+        }
     }
 
     @Override
@@ -72,8 +76,13 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject {
         this.position.setX(this.position.getX() + this.speedh);
     }
 
-    public void shoot(){
+    @Override
+    public Bullet shoot(){
         // todo
+        this.bullet.getPosition().setX(this.getPosition().getX());
+        this.bullet.getPosition().setY(this.getPosition().getY());
+        this.bullet.start();
+        return this.bullet;
     }
 
     @Override
@@ -103,7 +112,7 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject {
 
     @Override
     public void speedUp(){
-        this.speedv += 0.01;
+        this.speedv += 0.007;
     }
 
     @Override
@@ -136,5 +145,26 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject {
     @Override
     public void setImageToNull(){
         this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, true, true);;
+    }
+
+    @Override
+    public void setPosition(Vector2D position){
+        this.position = position;
+        this.initX = position.getX();
+        this.initY = position.getY();
+    }
+
+    public void setType(String type){
+        this.bullet = BulletFactory.makeBullet(type, new Vector2D(this.getPosition().getX(), this.getPosition().getY()));
+    }
+
+    @Override
+    public void setHealth(double health){
+        this.health = health;
+    }
+
+    @Override
+    public void setImage(Image image){
+        this.image = image;
     }
 }
