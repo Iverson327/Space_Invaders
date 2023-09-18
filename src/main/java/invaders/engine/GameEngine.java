@@ -137,7 +137,6 @@ public class GameEngine {
 	 * Updates the game/simulation
 	 */
 	public void update(){
-		this.end = true;
 		if(end){
 			if(!endadded){
 				renderables.add(new EndImage());
