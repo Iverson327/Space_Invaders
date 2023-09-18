@@ -146,6 +146,7 @@ public class GameEngine {
 			return;
 		}
 		movePlayer();
+		renderables.removeIf(Renderable::isDelete);
 		for(Enemy em: enemies){
 			em.update();
 			if(this.bullets.size() < 3){
