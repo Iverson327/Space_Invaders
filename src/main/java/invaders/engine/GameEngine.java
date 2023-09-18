@@ -14,6 +14,7 @@ import invaders.entities.Bunker;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
+import invaders.rendering.EndImage;
 
 import invaders.builders.BuildObject;
 import invaders.builders.BunkerBuilder;
@@ -44,6 +45,7 @@ public class GameEngine {
 	private Player player;
 
 	private boolean end = false;
+	private boolean endadded = false;
 
 	private Bullet playerBullet;
 
@@ -135,7 +137,13 @@ public class GameEngine {
 	 * Updates the game/simulation
 	 */
 	public void update(){
+		this.end = true;
 		if(end){
+			if(!endadded){
+				renderables.add(new EndImage());
+				this.endadded = true;
+				return;
+			}
 			return;
 		}
 		movePlayer();
@@ -174,6 +182,14 @@ public class GameEngine {
 				if(bullet.isColliding(emBullet)){
 					emBullet.takeDamage(1);
 					bullet.takeDamage(1);
+					break;
+				}
+			}
+			for(Bunker bk: bunkers){
+				if(bullet.isColliding(bk)){
+					// System.out.print("collide\n");
+					bullet.takeDamage(1);
+					bk.takeDamage(1);
 					break;
 				}
 			}

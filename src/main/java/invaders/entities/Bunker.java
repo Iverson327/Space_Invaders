@@ -1,6 +1,8 @@
 package invaders.entities;
 
 import invaders.logic.Damagable;
+import invaders.logic.BunkerState;
+import invaders.logic.GreenState;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Animator;
@@ -22,21 +24,21 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject, Buil
     private double height;
 
     private Image image;
-    private final Image greenImage;
-    private final Image yellowImage;
-    private final Image redImage;
+    private BunkerState state;
     private boolean isDelete = false;
 
     public Bunker(){
-        this.greenImage =  new Image(new File("src/main/resources/green_bunker.png").toURI().toString(), width, height, true, true);
-        this.yellowImage = new Image(new File("src/main/resources/yellow_bunker.png").toURI().toString(), width, height, true, true);
-        this.redImage = new Image(new File("src/main/resources/red_bunker.png").toURI().toString(), width, height, true, true);
-        this.image = this.greenImage;
+        this.state = new GreenState();
+        this.image = new Image(state.getColour().toURI().toString(), width, height, true, true);
     }
 
     @Override
     public void takeDamage(double amount) {
         this.health -= amount;
+        if(this.health <= 2){
+            this.state = this.state.next();
+        }
+        this.image = new Image(state.getColour().toURI().toString(), width, height, true, true);
         if(this.health <= 0){
             this.setImageToNull();
             this.isDelete = true;
