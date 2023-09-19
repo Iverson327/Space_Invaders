@@ -154,8 +154,8 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
         this.initY = position.getY();
     }
 
-    public void setType(String type){
-        this.bullet = BulletFactory.makeBullet(type, new Vector2D(this.getPosition().getX(), this.getPosition().getY()));
+    public void setType(String type, double gameY){
+        this.bullet = BulletFactory.makeBullet(type, new Vector2D(this.getPosition().getX(), this.getPosition().getY()), gameY);
     }
 
     @Override

@@ -29,10 +29,12 @@ public class EnemyBullet implements Bullet {
     private boolean isDelete = false;
     private String type;
     private BulletRule rule;
+    private double bound;
 
 
-    public EnemyBullet(Vector2D position, String type){
+    public EnemyBullet(Vector2D position, String type, double gameY){
         this.type = type;
+        this.bound = gameY;
         if(type.equals("slow_straight")){
             this.image = new Image(new File("src/main/resources/slowBullet.png").toURI().toString(), width, height, true, true);
             this.rule = new SlowRule();
@@ -123,7 +125,7 @@ public class EnemyBullet implements Bullet {
     @Override
     public void update(){
         this.position.setY(rule.down(this.position.getY()));
-        if(this.position.getY() >= 399 + this.height){
+        if(this.position.getY() >= bound - 1 + this.height){
             this.isDelete = true;
         }
     }

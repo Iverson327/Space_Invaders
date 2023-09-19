@@ -21,7 +21,7 @@ public class PlayerBullet implements Bullet{
     private final double width = 15;
     private final double height = 20;
     private Image image;
-    private double speedv = 1.5;
+    private double speedv = 2.5;
     private boolean isDelete = false;
 
 

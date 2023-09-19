@@ -44,6 +44,9 @@ public class GameEngine {
 	private List<Renderable> renderables;
 	private Player player;
 
+	private long gameX;
+	private long gameY;
+
 	private boolean end = false;
 	private boolean endadded = false;
 
@@ -71,6 +74,13 @@ public class GameEngine {
 			// convert Object to JSONObject
 			JSONObject jsonObject = (JSONObject) object;
 
+			JSONObject jsonGame = (JSONObject) jsonObject.get("Game");
+
+			// reading a coordinate from the nested section within the game
+			// note that the game x and y are of type Long (i.e. they are integers)
+			this.gameX = (Long) ((JSONObject) jsonGame.get("size")).get("x");
+			this.gameY = (Long) ((JSONObject) jsonGame.get("size")).get("y");
+
 			// reading the "Enemies" array:
 			JSONArray jsonEnemies = (JSONArray) jsonObject.get("Enemies");
 
@@ -88,7 +98,7 @@ public class GameEngine {
 				embuilder.buildHealth();
 				embuilder.buildImage();
 				embuilder.buildPosition(new Vector2D(enemyX, enemyY));
-				embuilder.buildType(projectileStrategy);
+				embuilder.buildType(projectileStrategy, gameY);
 				Enemy enemy = embuilder.getObject();
 				renderables.add(enemy);
 				// gameobjects.add(enemy);
@@ -121,6 +131,20 @@ public class GameEngine {
 				// System.out.println("Enemey x: " + positionX + ", projectile: " + projectileStrategy);
 			}
 
+			JSONObject jsonPlayer = (JSONObject) jsonObject.get("Player");
+
+			// reading a coordinate from the nested section within the game
+			// note that the game x and y are of type Long (i.e. they are integers)
+			String colour = (String) jsonPlayer.get("colour");
+			long speed = (Long) jsonPlayer.get("speed");
+			long lives = (Long) jsonPlayer.get("lives");
+			long xPos = (Long) ((JSONObject) jsonPlayer.get("position")).get("x");
+			long yPos = (Long) ((JSONObject) jsonPlayer.get("position")).get("y");
+
+			player = new Player(new Vector2D(xPos, yPos), speed, lives, colour, gameY);
+			// player.setColour(colour);
+			renderables.add(player);
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -129,8 +153,7 @@ public class GameEngine {
 			e.printStackTrace();
 		}
 
-		player = new Player(new Vector2D(200, 380));
-		renderables.add(player);
+		
 	}
 
 	/**
@@ -207,7 +230,7 @@ public class GameEngine {
 				this.end = true;
 				break;
 			}
-			if(em.getPosition().getY() >= 399-em.getHeight()){
+			if(em.getPosition().getY() >= gameY - 1 - em.getHeight()){
 				this.end = true;
 				break;
 			}
@@ -248,16 +271,16 @@ public class GameEngine {
 			if(!ro.getLayer().equals(Renderable.Layer.FOREGROUND)){
 				continue;
 			}
-			if(ro.getPosition().getX() + ro.getWidth() >= 640) {
-				ro.getPosition().setX(639-ro.getWidth());
+			if(ro.getPosition().getX() + ro.getWidth() >= gameX) {
+				ro.getPosition().setX(gameX - 1 - ro.getWidth());
 			}
 
 			if(ro.getPosition().getX() <= 0) {
 				ro.getPosition().setX(1);
 			}
 
-			if(ro.getPosition().getY() + ro.getHeight() >= 400) {
-				ro.getPosition().setY(399-ro.getHeight());
+			if(ro.getPosition().getY() + ro.getHeight() >= gameY) {
+				ro.getPosition().setY(gameY - 1 - ro.getHeight());
 			}
 
 			if(ro.getPosition().getY() <= 0) {

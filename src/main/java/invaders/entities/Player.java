@@ -19,18 +19,22 @@ public class Player implements Moveable, Damagable, Renderable, Collider, Shoota
 
     private final Vector2D position;
     private final Animator anim = null;
-    private double health = 10;
+    private double health;
 
-    private final double width = 25;
-    private final double height = 30;
-    private final Image image;
+    private final double width = 40;
+    private final double height = 35;
+    private final double speed;
+    private Image image;
 
     private Bullet bullet;
 
-    public Player(Vector2D position){
-        this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), width, height, true, true);
+    public Player(Vector2D position, double speed, double health, String colour, double gameY){
+        // this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), width, height, true, true);
         this.position = position;
-        this.bullet = BulletFactory.makeBullet("Player", new Vector2D(this.getPosition().getX(), this.getPosition().getY()));
+        this.speed = speed;
+        this.health = health;
+        this.bullet = BulletFactory.makeBullet("Player", new Vector2D(this.getPosition().getX(), this.getPosition().getY()), gameY);
+        setColour(colour);
     }
 
     @Override
@@ -60,12 +64,12 @@ public class Player implements Moveable, Damagable, Renderable, Collider, Shoota
 
     @Override
     public void left() {
-        this.position.setX(this.position.getX() - 1);
+        this.position.setX(this.position.getX() - this.speed);
     }
 
     @Override
     public void right() {
-        this.position.setX(this.position.getX() + 1);
+        this.position.setX(this.position.getX() + this.speed);
     }
 
     @Override
@@ -112,5 +116,27 @@ public class Player implements Moveable, Damagable, Renderable, Collider, Shoota
 
     @Override
 	public void setImageToNull(){}
+
+    public void setColour(String colour){
+        colour = colour.toLowerCase();
+        if(colour.equals("green")){
+            this.image = new Image(new File("src/main/resources/greenplayer.png").toURI().toString(), this.width, this.height, true, true);
+            return;
+        }
+        if(colour.equals("red")){
+            this.image = new Image(new File("src/main/resources/redplayer.png").toURI().toString(), this.width, this.height, true, true);
+            return;
+        }
+        if(colour.equals("blue")){
+            this.image = new Image(new File("src/main/resources/blueplayer.png").toURI().toString(), this.width, this.height, true, true);
+            return;
+        }
+        if(colour.equals("yellow")){
+            this.image = new Image(new File("src/main/resources/yellowplayer.png").toURI().toString(), this.width, this.height, true, true);
+            return;
+        }
+        this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), this.width, this.height, true, true);
+        return;
+    }
 
 }

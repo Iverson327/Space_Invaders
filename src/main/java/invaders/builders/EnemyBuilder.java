@@ -30,8 +30,8 @@ public class EnemyBuilder implements ObjectBuilder {
         this.enemy.setPosition(position);
     }
 
-    public void buildType(String type){
-        this.enemy.setType(type);
+    public void buildType(String type, double gameY){
+        this.enemy.setType(type, gameY);
     }
 
     public Enemy getObject(){

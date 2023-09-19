@@ -2,11 +2,11 @@
   "Game": {
     "size": {
       "x": 640,
-      "y": 400
+      "y": 640
     }
   },
   "Player": {
-    "colour": "green",
+    "colour": "white",
     "speed": 1,
     "lives": 3,
     "position": {
