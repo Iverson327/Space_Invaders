@@ -25,8 +25,8 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
     private double initX;
     private double initY;
 
-    private final double width = 25;
-    private final double height = 30;
+    private final double width = 30;
+    private final double height = 35;
     private Image image;
     private double speedh = 0.2;
     private double speedv = 10;
