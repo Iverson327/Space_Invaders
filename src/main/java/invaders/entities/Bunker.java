@@ -1,8 +1,8 @@
 package invaders.entities;
 
 import invaders.logic.Damagable;
-import invaders.logic.BunkerState;
-import invaders.logic.GreenState;
+import invaders.logic.states.BunkerState;
+import invaders.logic.states.GreenState;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Animator;

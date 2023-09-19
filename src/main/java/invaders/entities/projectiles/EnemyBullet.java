@@ -1,9 +1,9 @@
 package invaders.entities.projectiles;
 
 import invaders.logic.Damagable;
-import invaders.logic.BulletRule;
-import invaders.logic.SlowRule;
-import invaders.logic.FastRule;
+import invaders.logic.bulletRule.BulletRule;
+import invaders.logic.bulletRule.SlowRule;
+import invaders.logic.bulletRule.FastRule;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Animator;

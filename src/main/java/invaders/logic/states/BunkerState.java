@@ -1,4 +1,4 @@
-package invaders.logic;
+package invaders.logic.states;
 
 import java.io.File;
 

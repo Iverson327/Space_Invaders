@@ -1,6 +1,6 @@
-package invaders.logic;
+package invaders.logic.states;
 
-import invaders.logic.BunkerState;
+import invaders.logic.states.BunkerState;
 
 import java.io.File;
 
