@@ -29,9 +29,12 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
     private final double height = 30;
     private Image image;
     private double speedh = 0.2;
-    private double speedv = 0.015;
+    private double speedv = 10;
     private boolean left = true;
     private boolean right = false;
+
+    private double edgeL;
+    private double edgeR;
 
     private boolean isDelete = false;
 
@@ -79,9 +82,11 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
     @Override
     public Bullet shoot(){
         // todo
-        this.bullet.getPosition().setX(this.getPosition().getX());
-        this.bullet.getPosition().setY(this.getPosition().getY());
-        this.bullet.start();
+        if(this.bullet.isDelete()){
+            this.bullet.getPosition().setX(this.getPosition().getX());
+            this.bullet.getPosition().setY(this.getPosition().getY());
+            this.bullet.start();
+        }
         return this.bullet;
     }
 
@@ -112,7 +117,7 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
 
     @Override
     public void speedUp(){
-        this.speedv += 0.007;
+        this.speedv += 2;
     }
 
     @Override
@@ -125,16 +130,18 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
         }else if(left){
             left();
         }
-        if (this.position.getX() <= this.initX - 75 && !right){
-            this.position.setX(this.initX - 75);
+        if (this.position.getX() <= this.initX - (this.edgeL - 3) && !right){
+            this.position.setX(this.initX - (this.edgeL - 3));
+            down();
             left = false;
             right = true;
-        }else if(this.position.getX() >= this.initX + 75 && !left){
-            this.position.setX(this.initX + 75);
+        }else if(this.position.getX() >= this.initX + (this.edgeR - 3) && !left){
+            this.position.setX(this.initX + (this.edgeR - 3));
+            down();
             left = true;
             right = false;
         }
-        down();
+        // down();
     }
 
     // @Override
@@ -156,6 +163,11 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
 
     public void setType(String type, double gameY){
         this.bullet = BulletFactory.makeBullet(type, new Vector2D(this.getPosition().getX(), this.getPosition().getY()), gameY);
+    }
+
+    public void setEdge(double edgeL, double edgeR){
+        this.edgeL = edgeL;
+        this.edgeR = edgeR;
     }
 
     @Override

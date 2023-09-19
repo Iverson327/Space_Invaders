@@ -34,6 +34,10 @@ public class EnemyBuilder implements ObjectBuilder {
         this.enemy.setType(type, gameY);
     }
 
+    public void buildEdge(double edgeL, double edgeR){
+        this.enemy.setEdge(edgeL, edgeR);
+    }
+
     public Enemy getObject(){
         return this.enemy;
     }

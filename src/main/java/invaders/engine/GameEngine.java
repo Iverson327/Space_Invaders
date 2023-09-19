@@ -84,6 +84,20 @@ public class GameEngine {
 			// reading the "Enemies" array:
 			JSONArray jsonEnemies = (JSONArray) jsonObject.get("Enemies");
 
+			long mindis = gameX;
+			long maxdis = 0;
+			for (Object obj : jsonEnemies) {
+				JSONObject jsonEnemy = (JSONObject) obj;
+				long emX = (long) ((JSONObject) jsonEnemy.get("position")).get("x");
+				if(emX < mindis){
+					mindis = emX;
+				}
+				if(emX > maxdis){
+					maxdis = emX;
+				}
+			}
+			maxdis = gameX - maxdis - 25;
+
 			// reading from the array:
 			for (Object obj : jsonEnemies) {
 				JSONObject jsonEnemy = (JSONObject) obj;
@@ -99,6 +113,7 @@ public class GameEngine {
 				embuilder.buildImage();
 				embuilder.buildPosition(new Vector2D(enemyX, enemyY));
 				embuilder.buildType(projectileStrategy, gameY);
+				embuilder.buildEdge(mindis, maxdis);
 				Enemy enemy = embuilder.getObject();
 				renderables.add(enemy);
 				// gameobjects.add(enemy);
