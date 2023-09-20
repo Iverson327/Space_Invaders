@@ -136,6 +136,7 @@ public class GameEngine {
 				bkBuilder.buildPosition(new Vector2D(bunkerX, bunkerY));
 				bkBuilder.buildWidth(bunkerW);
 				bkBuilder.buildHeight(bunkerH);
+				bkBuilder.buildImage();
 				Bunker bunker = bkBuilder.getObject();
 				// Bunker bunker = new Bunker(new Vector2D(bunkerX, bunkerY), bunkerW, bunkerH);
 				renderables.add(bunker);

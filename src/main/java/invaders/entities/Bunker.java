@@ -27,10 +27,7 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject, Buil
     private BunkerState state;
     private boolean isDelete = false;
 
-    public Bunker(){
-        this.state = new GreenState();
-        this.image = new Image(state.getColour().toURI().toString(), width, height, true, true);
-    }
+    public Bunker(){}
 
     @Override
     public void takeDamage(double amount) {
@@ -38,7 +35,7 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject, Buil
         if(this.health <= 2){
             this.state = this.state.next();
         }
-        this.image = new Image(state.getColour().toURI().toString(), width, height, true, true);
+        this.image = new Image(state.getColour().toURI().toString(), width, height, false, true);
         if(this.health <= 0){
             this.setImageToNull();
             this.isDelete = true;
@@ -110,7 +107,7 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject, Buil
 
     @Override
     public void setImageToNull(){
-        this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, true, true);;
+        this.image = new Image(new File("src/main/resources/null.png").toURI().toString(), width, height, false, true);;
     }
 
     public void setWidth(double width){
@@ -135,5 +132,10 @@ public class Bunker implements Moveable, Damagable, Renderable, GameObject, Buil
     @Override
     public void setImage(Image image){
         this.image = image;
+    }
+
+    public void setImage(){
+        this.state = new GreenState();
+        this.image = new Image(state.getColour().toURI().toString(), width, height, false, true);
     }
 }

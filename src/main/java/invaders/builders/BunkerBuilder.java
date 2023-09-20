@@ -21,7 +21,9 @@ public class BunkerBuilder implements ObjectBuilder {
     }
 
     @Override
-    public void buildImage(){}
+    public void buildImage(){
+        this.bunker.setImage();
+    }
 
     @Override
     public void buildPosition(Vector2D position){
