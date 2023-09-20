@@ -96,7 +96,7 @@ public class GameEngine {
 					maxdis = emX;
 				}
 			}
-			maxdis = gameX - maxdis - 25;
+			maxdis = gameX - maxdis - 30;
 
 			// reading from the array:
 			for (Object obj : jsonEnemies) {
