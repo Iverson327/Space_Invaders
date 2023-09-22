@@ -8,9 +8,9 @@ public interface GameObject extends Collider {
 
     public void start();
     public void update();
-    public double getWidth();
-    public double getHeight();
-    public Vector2D getPosition();
+    // public double getWidth();
+    // public double getHeight();
+    // public Vector2D getPosition();
     // public boolean isBunker();
 
 }

@@ -12,20 +12,20 @@ import invaders.GameObject;
 import javafx.scene.image.Image;
 
 public interface Bullet extends Damagable, Moveable, Renderable, GameObject, Collider {
-    public boolean isDelete();
-    public void takeDamage(double amount);
-    public double getHealth();
-    public boolean isAlive();
-    public void up();
-    public void down();
-    public void left();
-    public void right();
-    public void speedUp();
-    public Image getImage();
-    public double getWidth();
-    public double getHeight();
-    public Vector2D getPosition();
-    public Layer getLayer();
-    public void start();
-    public void update();
+    // public boolean isDelete();
+    // public void takeDamage(double amount);
+    // public double getHealth();
+    // public boolean isAlive();
+    // public void up();
+    // public void down();
+    // public void left();
+    // public void right();
+    // public void speedUp();
+    // public Image getImage();
+    // public double getWidth();
+    // public double getHeight();
+    // public Vector2D getPosition();
+    // public Layer getLayer();
+    // public void start();
+    // public void update();
 }

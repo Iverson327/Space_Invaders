@@ -19,6 +19,7 @@ import invaders.rendering.EndImage;
 import invaders.builders.BuildObject;
 import invaders.builders.BunkerBuilder;
 import invaders.builders.EnemyBuilder;
+import invaders.builders.Director;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -108,13 +109,7 @@ public class GameEngine {
 
 				String projectileStrategy = (String) jsonEnemy.get("projectile");
 
-				EnemyBuilder embuilder = new EnemyBuilder();
-				embuilder.buildHealth();
-				embuilder.buildImage();
-				embuilder.buildPosition(new Vector2D(enemyX, enemyY));
-				embuilder.buildType(projectileStrategy, gameY);
-				embuilder.buildEdge(mindis, maxdis);
-				Enemy enemy = embuilder.getObject();
+				Enemy enemy = Director.makeEnemy(enemyX, enemyY, projectileStrategy, gameY, mindis, maxdis);
 				renderables.add(enemy);
 				// gameobjects.add(enemy);
 				enemies.add(enemy);
@@ -131,13 +126,7 @@ public class GameEngine {
 				long bunkerW = (long) ((JSONObject) jsonBunker.get("size")).get("x");
 				long bunkerH = (long) ((JSONObject) jsonBunker.get("size")).get("y");
 
-				BunkerBuilder bkBuilder = new BunkerBuilder();
-				bkBuilder.buildHealth();
-				bkBuilder.buildPosition(new Vector2D(bunkerX, bunkerY));
-				bkBuilder.buildWidth(bunkerW);
-				bkBuilder.buildHeight(bunkerH);
-				bkBuilder.buildImage();
-				Bunker bunker = bkBuilder.getObject();
+				Bunker bunker = Director.makeBunker(bunkerX, bunkerY, bunkerW, bunkerH);
 				// Bunker bunker = new Bunker(new Vector2D(bunkerX, bunkerY), bunkerW, bunkerH);
 				renderables.add(bunker);
 				// gameobjects.add(bunker);

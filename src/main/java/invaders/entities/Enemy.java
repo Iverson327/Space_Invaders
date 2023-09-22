@@ -144,7 +144,7 @@ public class Enemy implements Moveable, Damagable, Renderable, GameObject, Shoot
         // down();
     }
 
-    // @Override
+    @Override
     public boolean isDelete(){
         return this.isDelete;
     }

@@ -25,6 +25,7 @@ public class SpaceBackground implements Renderable {
 		pane.getChildren().add(space);
 	}
 
+	@Override
 	public Image getImage() {
 		return null;
 	}
